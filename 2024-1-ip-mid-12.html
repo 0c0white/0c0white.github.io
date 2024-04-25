@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/hangul-js"></script> <!-- 한글 자모 분리 라이브러리 -->
+    <style>
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .key {
+            user-select: none;
+            display: flex;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            background: rgb(241, 241, 241);
+            border: solid 1px #c6c6c6;
+            cursor: pointer;
+            font-size: small;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.5s ease;
+        }
+
+        .key:hover {
+            background-color: #e0e0e0;
+        }
+
+        .key:active {
+            background-color: #65a2e9;
+            color: white;
+        }
+
+        .eng {
+            height: 100%;
+            padding: 5px 0px 0px 5px;
+        }
+        .kor {
+            font-size: medium;
+            height: 100%;
+            padding-right: 5px;
+        }
+        #output {
+            width: 100%;
+            height: 200px;
+        }
+
+        .kor {
+            color: #9e9e9e
+        }
+
+        .kor .focus {
+            color: #000000
+        }
+    </style>
+</head>
+<body>
+    <textarea id="output" readonly></textarea>
+    <div id="keyboard">
+        <div class="row">
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">~</div>
+                    <div class="focus">`</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>!</div>
+                    <div class="focus">1</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>@</div>
+                    <div class="focus">2</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>#</div>
+                    <div class="focus">3</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>$</div>
+                    <div class="focus">4</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>%</div>
+                    <div class="focus">5</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>^</div>
+                    <div class="focus">6</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>&</div>
+                    <div class="focus">7</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>*</div>
+                    <div class="focus">8</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>(</div>
+                    <div class="focus">9</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>)</div>
+                    <div class="focus">0</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>_</div>
+                    <div class="focus">-</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div>+</div>
+                    <div class="focus">=</div>
+                </div>
+            </div>
+            <div class="key" style="width: 90px;" onclick="backspace()">Backspace</div>
+        </div>
+        <div class="row">
+            <div class="key" style="width: 70px;" onclick="tab()">Tab</div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">q</div>
+                <div class="kor">
+                    <div class="">ㅃ</div>
+                    <div class="focus">ㅂ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">w</div>
+                <div class="kor">
+                    <div class="">ㅉ</div>
+                    <div class="focus">ㅈ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">e</div>
+                <div class="kor">
+                    <div class="">ㄸ</div>
+                    <div class="focus">ㄷ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">r</div>
+                <div class="kor">
+                    <div class="">ㄲ</div>
+                    <div class="focus">ㄱ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">t</div>
+                <div class="kor">
+                    <div class="">ㅆ</div>
+                    <div class="focus">ㅅ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">y</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅛ</div>
+                    <div class="focus" style="color: black;">ㅛ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">u</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅕ</div>
+                    <div class="focus" style="color: black;">ㅕ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">i</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅑ</div>
+                    <div class="focus" style="color: black;">ㅑ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">o</div>
+                <div class="kor">
+                    <div class="">ㅒ</div>
+                    <div class="focus">ㅐ</div>
+                </div>
+            </div>
+            <div class="key" style="justify-content: space-between;">
+                <div class="eng active">p</div>
+                <div class="kor">
+                    <div class="">ㅖ</div>
+                    <div class="focus">ㅔ</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">{</div>
+                    <div class="focus">[</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">}</div>
+                    <div class="focus">]</div>
+                </div>
+            </div>
+            <div class="key special" style="width: 70px;">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">|</div>
+                    <div class="focus">\</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="key capslock" mode="0" style="width: 100px;" onclick="capsLock()">Caps Lock</div>
+            <div class="key">
+                <div class="eng active">a</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅁ</div>
+                    <div class="focus" style="color: black;">ㅁ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">s</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㄴ</div>
+                    <div class="focus" style="color: black;">ㄴ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">d</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅇ</div>
+                    <div class="focus" style="color: black;">ㅇ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">f</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㄹ</div>
+                    <div class="focus" style="color: black;">ㄹ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">g</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅎ</div>
+                    <div class="focus" style="color: black;">ㅎ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">h</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅗ</div>
+                    <div class="focus" style="color: black;">ㅗ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">j</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅓ</div>
+                    <div class="focus" style="color: black;">ㅓ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">k</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅏ</div>
+                    <div class="focus" style="color: black;">ㅏ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">l</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅣ</div>
+                    <div class="focus" style="color: black;">ㅣ</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">:</div>
+                    <div class="focus">;</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">"</div>
+                    <div class="focus">'</div>
+                </div>
+            </div>
+            <div class="key" style="width: 100px" onclick="enterclick()">Enter</div>
+        </div>
+        <div class="row">
+            <div class="key shift" mode="0" style="width: 130px;" onclick="shiftclick()">Shift</div>
+            <div class="key">
+                <div class="eng active">z</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅋ</div>
+                    <div class="focus" style="color: black;">ㅋ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">x</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅌ</div>
+                    <div class="focus" style="color: black;">ㅌ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">c</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅊ</div>
+                    <div class="focus" style="color: black;">ㅊ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">v</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅍ</div>
+                    <div class="focus" style="color: black;">ㅍ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">b</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅠ</div>
+                    <div class="focus" style="color: black;">ㅠ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">n</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅜ</div>
+                    <div class="focus" style="color: black;">ㅜ</div>
+                </div>
+            </div>
+            <div class="key">
+                <div class="eng active">m</div>
+                <div class="kor">
+                    <div class="" style="visibility: hidden;">ㅡ</div>
+                    <div class="focus" style="color: black;">ㅡ</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class=""><</div>
+                    <div class="focus">,</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">></div>
+                    <div class="focus">.</div>
+                </div>
+            </div>
+            <div class="key special">
+                <div class="eng active"></div>
+                <div class="kor">
+                    <div class="">?</div>
+                    <div class="focus">/</div>
+                </div>
+            </div>
+            <div class="key shift" mode="0" style="width: 130px;" onclick="shiftclick()">Shift</div>
+        </div>
+        <div class="row">
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">Ctrl</div>
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">⊞</div>
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">Alt</div>
+            <div class="key" style="width: 320px;" onclick="space()">ㅡ</div>
+            <div class="key" style="width: 70px;" onclick="changeLang()">한/영</div>
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">Fn</div>
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">⊟</div>
+            <div class="key" style="width: 70px;" onclick="alert('미완성 기능입니다!')">Ctrl</div>
+        </div>
+    </div>
+    <script>
+        let keys = Array.from(document.getElementsByClassName("key"));
+        keys.forEach(function(key) {
+            key.addEventListener('click', function() {
+                let output = document.getElementById('output');
+                let activeElement = this.querySelector('.active');
+                if(key.classList.contains('special')){
+                    activeElement = this.querySelector('.kor');
+                }
+                if (activeElement && activeElement.classList.contains('kor')) {
+                    let focus = activeElement.querySelector('.focus');
+                    output.value += focus.innerText;
+                } else{
+                    output.value += activeElement.innerText;
+                }
+                let shift = document.getElementsByClassName('shift')[0];
+                let mode = shift.getAttribute('mode');
+                if (mode === '1') {
+                    shiftclick();
+                    let keys = Array.from(document.getElementsByClassName("key"));
+                    keys.forEach(function(key) {
+                        let engChild = key.querySelector('.eng');
+                        if (engChild) {
+                            let text = engChild.innerText;
+                            if (text === text.toLowerCase()) {
+                                engChild.innerText = text.toLowerCase();
+                            } else {
+                                engChild.innerText = text.toUpperCase();
+                            }
+                        }
+                    });
+
+                }
+
+                // 한글 자음 모음 조합하는 함수 입니다.
+                let disassembled = Hangul.disassemble(output.value);
+                let assembled = Hangul.assemble(disassembled);
+                output.value = assembled;
+            });
+        });
+
+        function backspace() {
+            output.value = output.value.slice(0, -1);
+        }
+
+        function space() {
+            output.value += ' ';
+        }
+
+        function tab() {
+            output.value += '\t';
+        }
+
+        function changeLang() {
+            let keys = Array.from(document.getElementsByClassName("key"));
+            keys.forEach(function(key) {
+                let engChild = key.querySelector('.eng');
+                let korChild = key.querySelector('.kor');
+                if (!engChild || !korChild) {
+                    return;
+                }
+                if (engChild.classList.contains('active')) {
+                    engChild.classList.remove('active');
+                    korChild.classList.add('active');
+                } else {
+                    korChild.classList.remove('active');
+                    engChild.classList.add('active');
+                }
+            });
+        }
+
+        function capsLock() {
+            let keys = Array.from(document.getElementsByClassName("key"));
+            keys.forEach(function(key) {
+                let engChild = key.querySelector('.eng');
+                if (engChild) {
+                    let text = engChild.innerText;
+                    if (text === text.toUpperCase()) {
+                        engChild.innerText = text.toLowerCase();
+                    } else {
+                        engChild.innerText = text.toUpperCase();
+                    }
+                }
+            });
+            let capslock = document.getElementsByClassName('capslock')[0];
+            let mode = capslock.getAttribute('mode');
+
+            if (mode === '0') {
+                capslock.style.backgroundColor = 'rgb(84, 130, 187)';
+                capslock.style.color = '#ffffff';
+            } else {
+                capslock.style.backgroundColor = '#f1f1f1';
+                capslock.style.color = '#000000';
+            }
+            capslock.setAttribute('mode', mode === '1' ? '0' : '1');
+        }
+
+        function enterclick(){
+            output.value += '\n';
+        }
+
+        function shiftclick(){
+            let keys = Array.from(document.getElementsByClassName("key"));
+            keys.forEach(function(key) {
+                let engChild = key.querySelector('.eng');
+                if (engChild) {
+                    let text = engChild.innerText;
+                    if (text === text.toUpperCase()) {
+                        if(document.getElementsByClassName('capslock')[0].getAttribute('mode') === '0'){
+                            engChild.innerText = text.toLowerCase();
+                        }
+                    } else {
+                        engChild.innerText = text.toUpperCase();
+                    }
+                }
+                let korChild = key.querySelector('.kor');
+                if (korChild) {
+                    let divs = Array.from(korChild.querySelectorAll('div'));
+                    if (divs[0].classList.contains('focus')) {
+                        divs[0].classList.remove('focus');
+                        divs[1].classList.add('focus');
+                    } else {
+                        divs[1].classList.remove('focus');
+                        divs[0].classList.add('focus');
+                    }
+                }
+            });
+            let shift = document.getElementsByClassName('shift')[0];
+            let mode = shift.getAttribute('mode');
+            if (mode === '0') {
+                shift.style.backgroundColor = 'rgb(84, 130, 187)';
+                shift.style.color = '#ffffff';
+            } else {
+                shift.style.backgroundColor = '#f1f1f1';
+                shift.style.color = '#000000';
+            }
+            shift.setAttribute('mode', mode === '1' ? '0' : '1');
+        }
+
+    </script>
+</body>
+</html>
