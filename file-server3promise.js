@@ -1,7 +1,9 @@
 const fsProm = require("fs").promises;
+
 const url = require("url");
+
 const path = require("path");
-// handler for errors
+
 const output500Error = (response) => {
     response.writeHead(500, { "Content-Type": "text/html" });
     response.write("<h1>500 Error</h1>\n");
@@ -15,6 +17,7 @@ const mimeTypes = [
     ['.jpg', 'image/jpeg'],
     ['.svg', 'image/svg+xml']
 ];
+
 
 const http = require("http");
 const fs = require("fs");
